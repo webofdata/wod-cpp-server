@@ -12,28 +12,29 @@ RUN apt-get update \
                         libbz2-dev \
                         liblz4-dev \
                         libgflags-dev \
-                        libzstd-dev
+                        libzstd-dev \
+                        libssl-dev
 
 #get and install cmake
-RUN cd /home && wget https://cmake.org/files/v3.9/cmake-3.9.0.tar.gz \
-  && tar xfz cmake-3.9.0.tar.gz \
-  && rm cmake-3.9.0.tar.gz \
-  && cd cmake-3.9.0 \
+RUN cd /home && wget https://github.com/Kitware/CMake/releases/download/v3.16.0/cmake-3.16.0.tar.gz \
+  && tar xfz cmake-3.16.0.tar.gz \
+  && rm cmake-3.16.0.tar.gz \
+  && cd cmake-3.16.0 \
   && ./bootstrap \
   && make \
   && make install \
   && cd /home \
-  && rm -rf cmake-3.9.0
+  && rm -rf cmake-3.16.0
 
 # get and install boost
-RUN cd /home && wget http://downloads.sourceforge.net/project/boost/boost/1.64.0/boost_1_64_0.tar.gz \
-  && tar xfz boost_1_64_0.tar.gz \
-  && rm boost_1_64_0.tar.gz \
-  && cd boost_1_64_0 \
+RUN cd /home && wget https://dl.bintray.com/boostorg/release/1.71.0/source/boost_1_71_0.tar.gz \
+  && tar xfz boost_1_71_0.tar.gz \
+  && rm boost_1_71_0.tar.gz \
+  && cd boost_1_71_0 \
   && ./bootstrap.sh --prefix=/usr/local \
   && ./b2 install \
   && cd /home \
-  && rm -rf boost_1_64_0
+  && rm -rf boost_1_71_0
 
 # get and install rapidjson
 RUN cd /home \
@@ -59,10 +60,10 @@ RUN cd /home \
 
 # get and install simple web server
 RUN cd /home \
-  && git clone https://github.com/eidheim/Simple-Web-Server.git \
+  && git clone https://gitlab.com/eidheim/Simple-Web-Server.git \
   && mkdir /usr/local/include/simple-web-server \
   && cd Simple-Web-Server \
-  && cp server_http.hpp client_http.hpp server_https.hpp client_https.hpp crypto.hpp utility.hpp status_code.hpp /usr/local/include/simple-web-server
+  && cp server_http.hpp client_http.hpp server_https.hpp client_https.hpp crypto.hpp utility.hpp status_code.hpp asio_compatibility.hpp mutex.hpp /usr/local/include/simple-web-server
 
 RUN mkdir /home/wodsource
 COPY . /home/wodsource
